@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    
+    <!-- <i class="icon iconfont icon-mine2"></i>
+    <h1>{{ msg }}</h1> -->
   </div>
 </template>
 

@@ -1,12 +1,19 @@
 <template>
   <div id="app">
+    <left-Nav></left-Nav>
     <router-view/>
   </div>
 </template>
 
 <script>
+// 引入左边导航组件
+import leftNav from "@/components/common/leftNav";
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    leftNav
+  }
 }
 </script>
 
@@ -18,5 +25,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  height: 100%;
 }
 </style>
