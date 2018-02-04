@@ -59,6 +59,7 @@ export default {
 
 .left-nav ul li {
   padding: 10px;
+  cursor: pointer;
   border-bottom: 1px solid #ffd;
 }
 
