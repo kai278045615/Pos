@@ -36,5 +36,6 @@ export default {
   height: 100%;
   overflow: auto;
   width: 96%;
+  background-color: #EFF2F7;
 }
 </style>
