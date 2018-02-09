@@ -47,7 +47,7 @@
 
           <div class="btn">
             <el-button type="warning" size="small">挂单</el-button>
-            <el-button type="danger" size="small">删除</el-button>
+            <el-button type="danger" size="small" @click="delAll()">删除</el-button>
             <el-button type="success" size="small">结账</el-button>
           </div>
         </el-col>
@@ -193,12 +193,13 @@ export default {
     // 因为删除单个商品, 下面的数量和价格不会清空, 所以要另外处理
     delOrderList(goods) {
       this.tableData = this.tableData.filter(o => o.goodsId != goods.goodsId);
-      // 进行数量和价格的汇总机计算
-      this.tableData.forEach(element => {
-        this.totalCount += element.count;
-        this.totalMoney = this.totalMoney + element.price * element.count;
-        this.getAllMoney();
-      });
+      this.getAllMoney();
+    },
+    // 清空全部商品
+    delAll(goods) {
+      this.tableData = [];
+      this.totalCount = 0;
+      this.totalMoney = 0;
     },
     // 汇总数量和金额
     getAllMoney(goods) {
