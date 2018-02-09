@@ -5,33 +5,33 @@
         <el-col :span="7">
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="点餐" name="first" class="dcan">
-              <el-table :data="tableData3" border>
-                <el-table-column prop="goodName" label="商品名称" width="110">
+              <el-table :data="tableData" border>
+                <el-table-column prop="goodsName" label="商品名称" width="110">
                 </el-table-column>
                 <el-table-column prop="count" label="数量" width="60">
                 </el-table-column>
-                <el-table-column prop="money" label="金额" width="110">
+                <el-table-column prop="price" label="金额" width="110">
                 </el-table-column>
                 <el-table-column prop="operation" label="操作" width="110">
                   <template scope="scope">
                     <el-button type="text" size="small">删除</el-button>
-                    <el-button type="text" size="small">增加</el-button>
+                    <el-button type="text" size="small" @click="addOrderList(scope.row)">增加</el-button>
                   </template>
                 </el-table-column>
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="挂单" name="second">
-              <el-table :data="tableData3" border>
-                <el-table-column prop="goodName" label="商品名称" width="110">
+              <el-table :data="tableData" border>
+                <el-table-column prop="goodsName" label="商品名称" width="110">
                 </el-table-column>
                 <el-table-column prop="count" label="数量" width="60">
                 </el-table-column>
-                <el-table-column prop="money" label="金额" width="110">
+                <el-table-column prop="price" label="金额" width="110">
                 </el-table-column>
                 <el-table-column prop="operation" label="操作" width="110">
                   <template scope="scope">
                     <el-button type="text" size="small">删除</el-button>
-                    <el-button type="text" size="small">增加</el-button>
+                    <el-button type="text" size="small" @click="addOrderList(scope.row)">增加</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -39,6 +39,9 @@
             <el-tab-pane label="外卖" name="third">
               外卖
             </el-tab-pane>
+            <div class="total_div">
+              <small>总数量: </small>{{ totalCount }} &nbsp;&nbsp;&nbsp; <small>总价格: </small>{{ totalMoney }}
+            </div>
           </el-tabs>
 
           <div class="btn">
@@ -58,9 +61,9 @@
             </div>
             <div class="menu">
               <ul>
-                <li v-for="item in oftenGoods" :key="item.id">
-                  <span>{{ item.goodsName }}</span>
-                  <span>￥{{ item.price }}</span>
+                <li v-for="goods in oftenGoods" :key="goods.id" @click="addOrderList(goods)">
+                  <span>{{ goods.goodsName }}</span>
+                  <span>￥{{ goods.price }}</span>
                 </li>
               </ul>
             </div>
@@ -69,7 +72,7 @@
               <el-tabs>
                 <el-tab-pane label="汉堡">
                   <ul class='cookList'>
-                    <li v-for="goods in type0Goods" :key="goods.id">
+                    <li v-for="goods in type0Goods" :key="goods.id" @click="addOrderList(goods)">
                       <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
                       <span class="foodName">{{ goods.goodsName }}</span>
                       <span class="foodPrice">￥{{ goods.price }}元</span>
@@ -78,7 +81,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="小食">
                   <ul class='cookList'>
-                    <li v-for="goods in type1Goods" :key="goods.id">
+                    <li v-for="goods in type1Goods" :key="goods.id" @click="addOrderList(goods)">
                       <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
                       <span class="foodName">{{ goods.goodsName }}</span>
                       <span class="foodPrice">￥{{ goods.price }}元</span>
@@ -87,7 +90,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="饮料">
                   <ul class='cookList'>
-                    <li v-for="goods in type2Goods" :key="goods.id">
+                    <li v-for="goods in type2Goods" :key="goods.id" @click="addOrderList(goods)">
                       <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
                       <span class="foodName">{{ goods.goodsName }}</span>
                       <span class="foodPrice">￥{{ goods.price }}元</span>
@@ -96,7 +99,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="套餐">
                   <ul class='cookList'>
-                    <li v-for="goods in type3Goods" :key="goods.id">
+                    <li v-for="goods in type3Goods" :key="goods.id" @click="addOrderList(goods)">
                       <span class="foodImg"><img :src="goods.goodsImg" width="100%"></span>
                       <span class="foodName">{{ goods.goodsName }}</span>
                       <span class="foodPrice">￥{{ goods.price }}元</span>
@@ -119,37 +122,14 @@ export default {
   data() {
     return {
       activeName: "second",
-      tableData3: [
-        {
-          goodName: "可口可乐",
-          count: "1",
-          money: "5",
-          operation: ""
-        },
-        {
-          goodName: "香辣鸡腿堡",
-          count: "1",
-          money: "8",
-          operation: ""
-        },
-        {
-          goodName: "爱心薯条",
-          count: "1",
-          money: "10",
-          operation: ""
-        },
-        {
-          goodName: "甜筒",
-          count: "1",
-          money: "10",
-          operation: ""
-        }
-      ],
+      tableData: [],
       oftenGoods: [],
       type0Goods: [],
       type1Goods: [],
       type2Goods: [],
-      type3Goods: []
+      type3Goods: [],
+      totalCount: 0,  // 订单总数量
+      totalMoney: 0   // 订单总价格
     };
   },
   created() {
@@ -170,13 +150,52 @@ export default {
         this.type2Goods = rep.data[2];
         this.type3Goods = rep.data[3];
       })
-      .catch(error=> {
+      .catch(error => {
         alert("网络错误, 不能访问");
       });
   },
   methods: {
     handleClick(tab, event) {
       // console.log(tab, event);
+    },
+
+    // 添加订单列表的方法
+    addOrderList(goods) {
+      // console.log(goods);
+
+      this.totalCount = 0; // 数量
+      this.totalMoney = 0; // 总价格
+      let isHave = false; // 开关, 不存在
+      // 判断这个商品是否存在与订单列表中
+      for (let i = 0; i < this.tableData.length; i++) {
+        // console.log(this.tableData[i].goodsId);
+        if (this.tableData[i].goodsId == goods.goodsId) {
+          isHave = true; // 存在
+        }
+      }
+
+      // 根据isHave的值, 判断订单列表中是否已经存在此商品
+      if (isHave) {
+        // 存在就进行数量添加
+        let arr = this.tableData.filter(o => o.goodsId == goods.goodsId);
+        arr[0].count++;
+      } else {
+        // 新创建一条数据
+        let newGoods = {
+          goodsId: goods.goodsId,
+          goodsName: goods.goodsName,
+          price: goods.price,
+          count: 1
+        };
+        this.tableData.push(newGoods);
+      }
+      // 进行数量和价格的汇总机计算
+      this.tableData.forEach(element => {
+        // console.log(element);
+        this.totalCount += element.count;
+        this.totalMoney = this.totalMoney + element.price * element.count;
+        // console.log(this.totalMoney);
+      });
     }
   }
 };
@@ -217,6 +236,7 @@ export default {
   float: left;
   padding: 5px;
   list-style: none;
+  cursor: pointer;
   border: 1px solid #ccc;
   margin: 0 10px 10px 0;
   background-color: #fff;
@@ -242,6 +262,7 @@ export default {
   padding: 2px;
   float: left;
   margin: 2px;
+  cursor: pointer;
 }
 .cookList li span {
   display: block;
@@ -259,6 +280,12 @@ export default {
   font-size: 16px;
   padding-left: 10px;
   padding-top: 10px;
+}
+
+.total_div {
+  padding: 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #ebeef5;
 }
 </style>
 
