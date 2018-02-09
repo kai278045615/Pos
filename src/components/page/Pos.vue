@@ -14,7 +14,7 @@
                 </el-table-column>
                 <el-table-column prop="operation" label="操作" width="110">
                   <template scope="scope">
-                    <el-button type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small" @click="delOrderList(scope.row)">删除</el-button>
                     <el-button type="text" size="small" @click="addOrderList(scope.row)">增加</el-button>
                   </template>
                 </el-table-column>
@@ -30,7 +30,7 @@
                 </el-table-column>
                 <el-table-column prop="operation" label="操作" width="110">
                   <template scope="scope">
-                    <el-button type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small" @click="delOrderList(scope.row)">删除</el-button>
                     <el-button type="text" size="small" @click="addOrderList(scope.row)">增加</el-button>
                   </template>
                 </el-table-column>
@@ -40,7 +40,7 @@
               外卖
             </el-tab-pane>
             <div class="total_div">
-              <small>总数量: </small>{{ totalCount }} &nbsp;&nbsp;&nbsp; <small>总价格: </small>{{ totalMoney }}
+              <small>总数量 : </small>{{ totalCount }} &nbsp;&nbsp;&nbsp; <small>总价格 : </small>{{ totalMoney }}元
             </div>
           </el-tabs>
 
@@ -49,7 +49,6 @@
             <el-button type="danger" size="small">删除</el-button>
             <el-button type="success" size="small">结账</el-button>
           </div>
-
         </el-col>
       </div>
 
@@ -161,8 +160,6 @@ export default {
 
     // 添加订单列表的方法
     addOrderList(goods) {
-      // console.log(goods);
-
       this.totalCount = 0; // 数量
       this.totalMoney = 0; // 总价格
       let isHave = false; // 开关, 不存在
@@ -191,12 +188,15 @@ export default {
       }
       // 进行数量和价格的汇总机计算
       this.tableData.forEach(element => {
-        // console.log(element);
         this.totalCount += element.count;
         this.totalMoney = this.totalMoney + element.price * element.count;
-        // console.log(this.totalMoney);
       });
-    }
+    },
+    // 删除单个商品
+    // 因为删除单个商品, 下面的数量和价格不会清空, 所以要另外处理
+    delOrderList(goods){
+      this.tableData = this.tableData.filter( o => o.goodsId != goods.goodsId );
+    },
   }
 };
 </script>
