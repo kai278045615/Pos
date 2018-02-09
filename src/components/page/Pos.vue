@@ -48,7 +48,7 @@
           <div class="btn">
             <el-button type="warning" size="small">挂单</el-button>
             <el-button type="danger" size="small" @click="delAll()">删除</el-button>
-            <el-button type="success" size="small">结账</el-button>
+            <el-button type="success" size="small" @click="checkOut()">结账</el-button>
           </div>
         </el-col>
       </div>
@@ -189,17 +189,33 @@ export default {
       }
       this.getAllMoney(); // 调用汇总数量和金额, 之前还没做到这一步是在这里的
     },
+
     // 删除单个商品
     // 因为删除单个商品, 下面的数量和价格不会清空, 所以要另外处理
     delOrderList(goods) {
       this.tableData = this.tableData.filter(o => o.goodsId != goods.goodsId);
       this.getAllMoney();
     },
+
     // 清空全部商品
     delAll(goods) {
       this.tableData = [];
       this.totalCount = 0;
       this.totalMoney = 0;
+    },
+    checkOut(goods){
+      if(this.totalCount != 0){
+        this.tableData = [];
+        this.totalCount = 0;
+        this.totalMoney = 0;
+        // vue里自带$message的提示
+        this.$message({
+          message: "结账成功, 感谢为店里出了一份力",
+          type: "success"
+        });
+      }else {
+        this.$message.error("不能空结");
+      }
     },
     // 汇总数量和金额
     getAllMoney(goods) {
