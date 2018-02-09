@@ -40,7 +40,8 @@
               外卖
             </el-tab-pane>
             <div class="total_div">
-              <small>总数量 : </small>{{ totalCount }} &nbsp;&nbsp;&nbsp; <small>总价格 : </small>{{ totalMoney }}元
+              <small>总数量 : </small>{{ totalCount }} &nbsp;&nbsp;&nbsp;
+              <small>总价格 : </small>{{ totalMoney }}元
             </div>
           </el-tabs>
 
@@ -127,8 +128,8 @@ export default {
       type1Goods: [],
       type2Goods: [],
       type3Goods: [],
-      totalCount: 0,  // 订单总数量
-      totalMoney: 0   // 订单总价格
+      totalCount: 0, // 订单总数量
+      totalMoney: 0 // 订单总价格
     };
   },
   created() {
@@ -186,17 +187,31 @@ export default {
         };
         this.tableData.push(newGoods);
       }
+      this.getAllMoney(); // 调用汇总数量和金额, 之前还没做到这一步是在这里的
+    },
+    // 删除单个商品
+    // 因为删除单个商品, 下面的数量和价格不会清空, 所以要另外处理
+    delOrderList(goods) {
+      this.tableData = this.tableData.filter(o => o.goodsId != goods.goodsId);
       // 进行数量和价格的汇总机计算
       this.tableData.forEach(element => {
         this.totalCount += element.count;
         this.totalMoney = this.totalMoney + element.price * element.count;
+        this.getAllMoney();
       });
     },
-    // 删除单个商品
-    // 因为删除单个商品, 下面的数量和价格不会清空, 所以要另外处理
-    delOrderList(goods){
-      this.tableData = this.tableData.filter( o => o.goodsId != goods.goodsId );
-    },
+    // 汇总数量和金额
+    getAllMoney(goods) {
+      this.totalCount = 0;
+      this.totalMoney = 0;
+      if(this.tableData){
+        // 进行数量和价格的汇总机计算
+        this.tableData.forEach(element => {
+          this.totalCount += element.count;
+          this.totalMoney = this.totalMoney + element.price * element.count;
+        });
+      }
+    }
   }
 };
 </script>
